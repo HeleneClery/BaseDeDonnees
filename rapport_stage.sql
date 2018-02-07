@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  mer. 07 fév. 2018 à 13:22
+-- Généré le :  mer. 07 fév. 2018 à 17:02
 -- Version du serveur :  10.1.29-MariaDB
 -- Version de PHP :  7.2.0
 
@@ -21,6 +21,53 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `rapport_stage`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `stages`
+--
+
+CREATE TABLE `stages` (
+  `id_stage` int(11) NOT NULL,
+  `id_utilisateur` int(11) DEFAULT NULL,
+  `nom` varchar(255) NOT NULL,
+  `prenom` varchar(255) NOT NULL,
+  `promotion` int(11) NOT NULL,
+  `entreprise` varchar(255) NOT NULL,
+  `ville` varchar(255) NOT NULL,
+  `secteur` varchar(255) NOT NULL,
+  `sujet` varchar(255) NOT NULL,
+  `admission` tinyint(1) DEFAULT NULL,
+  `rapport_stage` varchar(255) NOT NULL,
+  `note_synthese` varchar(255) NOT NULL,
+  `resume_stage` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `technologies`
+--
+
+CREATE TABLE `technologies` (
+  `id_stage` int(11) NOT NULL,
+  `technologie` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `utilisateurs`
+--
+
+CREATE TABLE `utilisateurs` (
+  `id_utilisateur` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `validate` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -493,7 +540,7 @@ INSERT INTO `wp_usermeta` (`umeta_id`, `user_id`, `meta_key`, `meta_value`) VALU
 (13, 1, 'wp_user_level', '10'),
 (14, 1, 'dismissed_wp_pointers', ''),
 (15, 1, 'show_welcome_panel', '1'),
-(16, 1, 'session_tokens', 'a:2:{s:64:\"a09e3b4d3d8e46ef1ed8f23cf5eb93d6721efabe6329f1f70d2c35d4e0f4c5b2\";a:4:{s:10:\"expiration\";i:1518129349;s:2:\"ip\";s:3:\"::1\";s:2:\"ua\";s:115:\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36\";s:5:\"login\";i:1517956549;}s:64:\"a5fb396ba3c4cd6fed2a626db8c0c94cbabffba296c848da836a2bec023cc6e6\";a:4:{s:10:\"expiration\";i:1518177306;s:2:\"ip\";s:3:\"::1\";s:2:\"ua\";s:115:\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36\";s:5:\"login\";i:1518004506;}}'),
+(16, 1, 'session_tokens', 'a:2:{s:64:\"a09e3b4d3d8e46ef1ed8f23cf5eb93d6721efabe6329f1f70d2c35d4e0f4c5b2\";a:4:{s:10:\"expiration\";i:1518129349;s:2:\"ip\";s:3:\"::1\";s:2:\"ua\";s:115:\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36\";s:5:\"login\";i:1517956549;}s:64:\"6170e98378cf16ba782f2e11327ad4116291f3fa919acec8a55e00c5984d2828\";a:4:{s:10:\"expiration\";i:1518187896;s:2:\"ip\";s:3:\"::1\";s:2:\"ua\";s:115:\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36\";s:5:\"login\";i:1518015096;}}'),
 (17, 1, 'wp_dashboard_quick_press_last_post_id', '3'),
 (18, 1, 'community-events-location', 'a:1:{s:2:\"ip\";s:2:\"::\";}'),
 (19, 1, 'nav_menu_recently_edited', '2'),
@@ -531,6 +578,25 @@ INSERT INTO `wp_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `user_
 --
 -- Index pour les tables déchargées
 --
+
+--
+-- Index pour la table `stages`
+--
+ALTER TABLE `stages`
+  ADD PRIMARY KEY (`id_stage`),
+  ADD KEY `id_utilisateur` (`id_utilisateur`);
+
+--
+-- Index pour la table `technologies`
+--
+ALTER TABLE `technologies`
+  ADD KEY `id_stage` (`id_stage`);
+
+--
+-- Index pour la table `utilisateurs`
+--
+ALTER TABLE `utilisateurs`
+  ADD PRIMARY KEY (`id_utilisateur`);
 
 --
 -- Index pour la table `wp_commentmeta`
@@ -636,6 +702,18 @@ ALTER TABLE `wp_users`
 --
 
 --
+-- AUTO_INCREMENT pour la table `stages`
+--
+ALTER TABLE `stages`
+  MODIFY `id_stage` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `utilisateurs`
+--
+ALTER TABLE `utilisateurs`
+  MODIFY `id_utilisateur` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT pour la table `wp_commentmeta`
 --
 ALTER TABLE `wp_commentmeta`
@@ -700,6 +778,22 @@ ALTER TABLE `wp_usermeta`
 --
 ALTER TABLE `wp_users`
   MODIFY `ID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- Contraintes pour les tables déchargées
+--
+
+--
+-- Contraintes pour la table `stages`
+--
+ALTER TABLE `stages`
+  ADD CONSTRAINT `stages_ibfk_1` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`);
+
+--
+-- Contraintes pour la table `technologies`
+--
+ALTER TABLE `technologies`
+  ADD CONSTRAINT `technologies_ibfk_1` FOREIGN KEY (`id_stage`) REFERENCES `stages` (`id_stage`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
